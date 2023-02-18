@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #myCanvas {
+        background-image: url(grass.jpeg);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <script>
+      let img = new Image();
+      img.src = "static/img/road.jpeg";
+      let img2 = new Image();
+      img2.src = "static/img/grass.jpeg";
+      img.onload = () => {
+        img2.onload = () => {
+          var c = document.getElementById("myCanvas");
+          var ctx = c.getContext("2d");
+          let pat = ctx.createPattern(img, "repeat");
+          let pat2 = ctx.createPattern(img2, "repeat");
+          ctx.fillStyle = pat;
+          ctx.beginPath();
+          ctx.arc(200, 200, 180, 0.5 * Math.PI, 1.5 * Math.PI);
+          ctx.lineWidth = 3;
+          ctx.arc(600, 200, 180, 1.5 * Math.PI, 0.5 * Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = pat2;
+          ctx.beginPath();
+          ctx.arc(200, 200, 60, 0.5 * Math.PI, 1.5 * Math.PI);
+          ctx.arc(600, 200, 60, 1.5 * Math.PI, 0.5 * Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          document.getElementById("myCanvas").onclick = function () {
+            function silnik() {
+              var mtr = { x: 220, y: 325 };
+              ctx.beginPath();
+              ctx.moveTo(mtr.x, mtr.y);
+              let x = 220;
+              let y = 325;
+              let dy = 0;
+              let dx = 10;
+              let xp = mtr.x;
+              let yp = mtr.y;
+              let alfa = 0;
+              let R = 5;
+              function checkKey(e) {
+                if (e.keyCode == "68") {
+                  // klawisz A
+                  if (alfa < 3.141593) {
+                    alfa += 0.0872664626; // Zwiększam alfe o 5 stopni
+                  }
+                } else if (e.keyCode == "65") {
+                  // klawisz D
+                  if (alfa < 3.141593) {
+                    alfa -= 0.0872664626; // Zmniejszam alfe o 5 stopni
+                  }
+                }
+              }
+              setInterval(function () {
+                let flaga = false;
+                document.onkeydown = checkKey;
+                let sina = Math.sin(alfa).toFixed(3);
+                let cosa = Math.cos(alfa).toFixed(3);
+                dy = sina * R;
+                dx = cosa * R;
+                xp += dx;
+                yp += dy;
+                xk = xp;
+                yk = yp;
+                console.log(xk);
+                console.log(yk);
+                ctx.lineTo(xk, yk);
+                ctx.stroke();
+              }, 40);
+            }
+            silnik();
+          };
+        };
+      };
+    </script>
+  </body>
+</html>
